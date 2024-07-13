@@ -1,0 +1,80 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class SnapdealLoginVerification {
+    public static void main(String[] args) {
+        // Set the path for the ChromeDriver executable
+        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+
+        // Initialize the Chrome driver
+        WebDriver driver = new ChromeDriver();
+
+        try {
+            // Maximize the browser window
+            driver.manage().window().maximize();
+
+            // Navigate to the Snapdeal website
+            driver.get("http://www.snapdeal.com");
+
+            // Move the cursor to the Sign In button and hold it
+            WebElement signInButton = driver.findElement(By.xpath("//span[text()='Sign In']"));
+            Actions actions = new Actions(driver);
+            actions.moveToElement(signInButton).perform();
+
+            // Click on the Sign In button
+            WebElement loginButton = driver.findElement(By.xpath("//a[contains(text(),'login')]"));
+            loginButton.click();
+
+            // Wait until the login frame is available and switch to it
+            WebDriverWait wait = new WebDriverWait(driver, 10);
+            wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[contains(@id,'loginIframe')]")));
+
+            // Enter a valid Email Id in the Email Id field
+            WebElement emailField = driver.findElement(By.id("userName"));
+            emailField.sendKeys("yourdummyemail@example.com");
+
+            // Click on the Continue button
+            WebElement continueButton = driver.findElement(By.id("checkUser"));
+            continueButton.click();
+
+            // Wait for the password field to be visible
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("j_password_login_uc")));
+
+            // Enter the valid password in the Password field
+            WebElement passwordField = driver.findElement(By.id("j_password_login_uc"));
+            passwordField.sendKeys("yourdummypassword");
+
+            // Click on the Login button
+            WebElement loginSubmitButton = driver.findElement(By.id("submitLoginUC"));
+            loginSubmitButton.click();
+
+            // Wait until the user is logged in successfully
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(),'Welcome')]")));
+
+            // Print the verification message
+            System.out.println("User logged in successfully!");
+
+        } finally {
+            // Close the browser
+            driver.quit();
+        }
+    }
+}
+Explanation of the script:
+Set the path for the ChromeDriver executable: Ensure chromedriver is installed and the path to it is set correctly.
+Initialize the Chrome driver: We use WebDriver to initialize the Chrome driver.
+Maximize the browser window: The window is maximized for better visibility.
+Navigate to the Snapdeal website: The Snapdeal website is opened.
+Move the cursor to the Sign In button: The cursor is moved to the "Sign In" button using Actions.
+Click on the Sign In button: The "login" button is clicked.
+Switch to the login frame: Selenium switches to the login frame that appears after clicking the login button.
+Enter Email Id: A dummy email id is entered in the email field.
+Click Continue: The continue button is clicked to proceed to the password field.
+Enter Password: A dummy password is entered in the password field.
+Click Login: The login button is clicked to submit the login form.
+Verification: The script waits for a welcome message or any indicator of a successful login, then prints a success message.
